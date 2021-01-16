@@ -58,7 +58,6 @@ mac_homebrew_packages:
   - watch
   # For displaying a notification when a command finishes
   - noti
-  - svn  # needed for installing font-cousine
 
 # Mac Apps to be installed with homebrew-cask
 mac_cask_packages:
