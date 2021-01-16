@@ -10,6 +10,8 @@
 [credential]
         helper = osxkeychain
 {% endif %}
+[gc]
+    auto = 1
 [alias]
         a = add
         st = status
@@ -69,25 +71,71 @@
 
         # Set up your branch to track a remote branch. Assumes you mean `origin/$branch-name`.
         track = "!f() { branch=$(git rev-parse --abbrev-ref HEAD); git branch $branch --set-upstream-to origin/$branch }; f"
+        
+        # oldies but goodies
+        outgoing = log -u origin/master..master # outgoing changes (in local, but not origin)
+        # Better log formatting
+        changes = log --pretty=format:'%h %cr %cn %Cgreen%s%Creset' --name-status
+        short = log --pretty=format:'%h %cr %cn %Cgreen%s%Creset'
+        filelog = log -u  # show changes to a file
+        #    changelog = log --pretty=oneline
+        changelog = log --pretty=format:'* %s `%h`' --no-merges
 [color]
         diff = auto
         status = auto
         branch = auto
-        ui = true
+        ui = auto
+        interactive = auto
+[color "diff"]
+    meta = yellow bold
+    commit = green bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
+[color "diff-highlight"]
+    oldNormal = red bold
+    oldHighlight = "red bold 52"
+    newNormal = "green bold"
+    newHighlight = "green bold 22"
+[color "branch"]
+    current = yellow reverse
+    local = yellow
+    remote = green
+[color "status"]
+    added = yellow
+    changed = green
+    untracked = cyan
 [core]
         excludesfile = ~/.gitignore_global
         attributesfile = ~/.gitattributes_global
         editor = vim
+	autocrlf = input
+	pager = diff-so-fancy | less --tabs=2 -RFX
 [apply]
         whitespace = nowarn
+[branch]
+  autosetuprebase = always
+[merge]
+    summary = true
 [mergetool]
         keepBackup = false
+	prompt = false
+[diff]
+    renameLimit = 10000
 [difftool]
         prompt = false
 [pull]
         rebase = true
+[push]
+	default = simple
 [github]
         user = {{ git_user }}
+[status]
+        # needed for mvn release plugin: https://jira.codehaus.org/browse/SCM-740
+        displayCommentPrefix = true
+[grep]
+	extendRegexp = true
 {% if git_signing_key %}
 [commit]
         gpgsign = true
